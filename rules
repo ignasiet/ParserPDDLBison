@@ -1,8 +1,21 @@
-<atomic function skeleton> ::= (<function - symbol> <typed list (variable)>)
+<predicates-def> ::= (:predicates <atomic formula skeleton> +)
+<atomic formula skeleton> ::= (<predicate> <typed list (variable)>)
+<predicate> ::= <name>
+<variable> ::= ?<name>
+
 <typed list (x)> ::= x*
 <typed list (x)> ::= x + - <type> <typed list(x)>
+
+<type> ::= (either <primitive-type>+)
+<type> ::= <primitive-type>
 
 <primitive-type> ::= <name>
 <primitive-type> ::= object
 <type> ::= (either <primitive-type> +)
 <type> ::= <primitive-type>
+
+
+(:predicates (adj ?i ?j - pos) (at ?i - pos) (safe ?i - pos)
+             (wumpus-at ?x - pos) (alive) (stench ?i - pos)
+             (gold-at ?i - pos) (got-the-treasure)
+             (breeze ?i - pos) (pit-at ?p - pos) )

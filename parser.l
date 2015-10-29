@@ -14,6 +14,8 @@ CHAR [a-zA-Z_]
 DIGIT [0-9]
 NUMBER [0-9](_[0-9]|[0-9])*
 STRING {CHAR}+(-|{CHAR}|{DIGIT})*
+QUESTION_TAG \?
+VARIABLE {QUESTION_TAG}+{CHAR}
 
 %%
 domain { KEYWORD(DOMAIN);}
@@ -30,6 +32,7 @@ problem { KEYWORD(PROBLEM);}
 [\t ] {}
 \n {}
 \- {TOKEN(HYPHEN);}
+{VARIABLE} {yylval.sval = strdup(yytext); TOKEN(VARIABLE);}
 {STRING}   { yylval.sval = strdup(yytext); TOKEN(STRING); }
 
 . { fprintf(stderr, "Unknown token '%s'\n", yytext); }

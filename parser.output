@@ -3,60 +3,105 @@ Terminals unused in grammar
    kPROBLEM
 
 
+State 38 conflicts: 2 shift/reduce, 1 reduce/reduce
+State 41 conflicts: 1 shift/reduce
+State 43 conflicts: 2 shift/reduce, 1 reduce/reduce
+State 45 conflicts: 2 shift/reduce, 1 reduce/reduce
+
+
 Grammar
 
     0 $accept: start $end
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     2 domain_name: tSTRING
 
-    3 domain_definitions: definition tRPAREN
+    3 domain_definitions: tLPAREN definition tRPAREN
 
     4 definition: kREQUIREMENTS definition
     5           | kTYPING definition
     6           | kSTRIPS definition
     7           | %empty
 
-    8 domain_types: types tRPAREN
+    8 domain_types: tLPAREN types tRPAREN
 
     9 types: kTYPES types
    10      | tSTRING types
    11      | %empty
+
+   12 predicates_def: tLPAREN list_predicates tRPAREN
+
+   13 list_predicates: kPREDICATES list_atomic_formula_skeleton
+
+   14 list_atomic_formula_skeleton: atomic_formula_skeleton list_atomic_formula_skeleton
+   15                             | %empty
+
+   16 atomic_formula_skeleton: tLPAREN predicate typed_list tRPAREN
+
+   17 typed_list: tHYPHEN type typed_list
+   18           | variable typed_list
+   19           | %empty
+
+   20 variable: tVARIABLE variable
+   21         | %empty
+
+   22 predicate: tSTRING
+
+   23 type: tSTRING
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-tLPAREN (258) 1
-tRPAREN (259) 1 3 8
-kREQUIREMENTS (260) 4
-kTYPING (261) 5
-kSTRIPS (262) 6
-kTYPES (263) 9
-kDEFINE (264) 1
-kDOMAIN (265) 1
-kPROBLEM (266)
-tSTRING (267) 2 10
+tLPAREN (258) 1 3 8 12 16
+tRPAREN (259) 1 3 8 12 16
+tHYPHEN (260) 17
+tVARIABLE (261) 20
+kREQUIREMENTS (262) 4
+kTYPING (263) 5
+kSTRIPS (264) 6
+kTYPES (265) 9
+kPREDICATES (266) 13
+kDEFINE (267) 1
+kDOMAIN (268) 1
+kPROBLEM (269)
+tSTRING (270) 2 10 22 23
 
 
 Nonterminals, with rules where they appear
 
-$accept (13)
+$accept (16)
     on left: 0
-start (14)
+start (17)
     on left: 1, on right: 0
-domain_name (15)
+domain_name (18)
     on left: 2, on right: 1
-domain_definitions (16)
+domain_definitions (19)
     on left: 3, on right: 1
-definition (17)
+definition (20)
     on left: 4 5 6 7, on right: 3 4 5 6
-domain_types (18)
+domain_types (21)
     on left: 8, on right: 1
-types (19)
+types (22)
     on left: 9 10 11, on right: 8 9 10
+predicates_def (23)
+    on left: 12, on right: 1
+list_predicates (24)
+    on left: 13, on right: 12
+list_atomic_formula_skeleton (25)
+    on left: 14 15, on right: 13 14
+atomic_formula_skeleton (26)
+    on left: 16, on right: 14
+typed_list (27)
+    on left: 17 18 19, on right: 16 17 18
+variable (28)
+    on left: 20 21, on right: 18 20
+predicate (29)
+    on left: 22, on right: 16
+type (30)
+    on left: 23, on right: 17
 
 
 State 0
@@ -70,7 +115,7 @@ State 0
 
 State 1
 
-    1 start: tLPAREN . kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN . kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     kDEFINE  shift, and go to state 3
 
@@ -84,7 +129,7 @@ State 2
 
 State 3
 
-    1 start: tLPAREN kDEFINE . tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE . tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     tLPAREN  shift, and go to state 5
 
@@ -98,14 +143,14 @@ State 4
 
 State 5
 
-    1 start: tLPAREN kDEFINE tLPAREN . kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE tLPAREN . kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     kDOMAIN  shift, and go to state 6
 
 
 State 6
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN . domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN . domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     tSTRING  shift, and go to state 7
 
@@ -121,187 +166,389 @@ State 7
 
 State 8
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name . tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name . tRPAREN domain_definitions domain_types predicates_def tRPAREN
 
     tRPAREN  shift, and go to state 9
 
 
 State 9
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN . tLPAREN domain_definitions tLPAREN domain_types tRPAREN
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN . domain_definitions domain_types predicates_def tRPAREN
 
     tLPAREN  shift, and go to state 10
+
+    domain_definitions  go to state 11
 
 
 State 10
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN . domain_definitions tLPAREN domain_types tRPAREN
+    3 domain_definitions: tLPAREN . definition tRPAREN
 
-    kREQUIREMENTS  shift, and go to state 11
-    kTYPING        shift, and go to state 12
-    kSTRIPS        shift, and go to state 13
+    kREQUIREMENTS  shift, and go to state 12
+    kTYPING        shift, and go to state 13
+    kSTRIPS        shift, and go to state 14
 
     $default  reduce using rule 7 (definition)
 
-    domain_definitions  go to state 14
-    definition          go to state 15
+    definition  go to state 15
 
 
 State 11
 
-    4 definition: kREQUIREMENTS . definition
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions . domain_types predicates_def tRPAREN
 
-    kREQUIREMENTS  shift, and go to state 11
-    kTYPING        shift, and go to state 12
-    kSTRIPS        shift, and go to state 13
+    tLPAREN  shift, and go to state 16
 
-    $default  reduce using rule 7 (definition)
-
-    definition  go to state 16
+    domain_types  go to state 17
 
 
 State 12
 
-    5 definition: kTYPING . definition
+    4 definition: kREQUIREMENTS . definition
 
-    kREQUIREMENTS  shift, and go to state 11
-    kTYPING        shift, and go to state 12
-    kSTRIPS        shift, and go to state 13
-
-    $default  reduce using rule 7 (definition)
-
-    definition  go to state 17
-
-
-State 13
-
-    6 definition: kSTRIPS . definition
-
-    kREQUIREMENTS  shift, and go to state 11
-    kTYPING        shift, and go to state 12
-    kSTRIPS        shift, and go to state 13
+    kREQUIREMENTS  shift, and go to state 12
+    kTYPING        shift, and go to state 13
+    kSTRIPS        shift, and go to state 14
 
     $default  reduce using rule 7 (definition)
 
     definition  go to state 18
 
 
+State 13
+
+    5 definition: kTYPING . definition
+
+    kREQUIREMENTS  shift, and go to state 12
+    kTYPING        shift, and go to state 13
+    kSTRIPS        shift, and go to state 14
+
+    $default  reduce using rule 7 (definition)
+
+    definition  go to state 19
+
+
 State 14
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions . tLPAREN domain_types tRPAREN
+    6 definition: kSTRIPS . definition
 
-    tLPAREN  shift, and go to state 19
+    kREQUIREMENTS  shift, and go to state 12
+    kTYPING        shift, and go to state 13
+    kSTRIPS        shift, and go to state 14
+
+    $default  reduce using rule 7 (definition)
+
+    definition  go to state 20
 
 
 State 15
 
-    3 domain_definitions: definition . tRPAREN
+    3 domain_definitions: tLPAREN definition . tRPAREN
 
-    tRPAREN  shift, and go to state 20
+    tRPAREN  shift, and go to state 21
 
 
 State 16
+
+    8 domain_types: tLPAREN . types tRPAREN
+
+    kTYPES   shift, and go to state 22
+    tSTRING  shift, and go to state 23
+
+    $default  reduce using rule 11 (types)
+
+    types  go to state 24
+
+
+State 17
+
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types . predicates_def tRPAREN
+
+    tLPAREN  shift, and go to state 25
+
+    predicates_def  go to state 26
+
+
+State 18
 
     4 definition: kREQUIREMENTS definition .
 
     $default  reduce using rule 4 (definition)
 
 
-State 17
+State 19
 
     5 definition: kTYPING definition .
 
     $default  reduce using rule 5 (definition)
 
 
-State 18
+State 20
 
     6 definition: kSTRIPS definition .
 
     $default  reduce using rule 6 (definition)
 
 
-State 19
+State 21
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN . domain_types tRPAREN
-
-    kTYPES   shift, and go to state 21
-    tSTRING  shift, and go to state 22
-
-    $default  reduce using rule 11 (types)
-
-    domain_types  go to state 23
-    types         go to state 24
-
-
-State 20
-
-    3 domain_definitions: definition tRPAREN .
+    3 domain_definitions: tLPAREN definition tRPAREN .
 
     $default  reduce using rule 3 (domain_definitions)
 
 
-State 21
+State 22
 
     9 types: kTYPES . types
 
-    kTYPES   shift, and go to state 21
-    tSTRING  shift, and go to state 22
+    kTYPES   shift, and go to state 22
+    tSTRING  shift, and go to state 23
 
     $default  reduce using rule 11 (types)
 
-    types  go to state 25
-
-
-State 22
-
-   10 types: tSTRING . types
-
-    kTYPES   shift, and go to state 21
-    tSTRING  shift, and go to state 22
-
-    $default  reduce using rule 11 (types)
-
-    types  go to state 26
+    types  go to state 27
 
 
 State 23
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types . tRPAREN
+   10 types: tSTRING . types
 
-    tRPAREN  shift, and go to state 27
+    kTYPES   shift, and go to state 22
+    tSTRING  shift, and go to state 23
+
+    $default  reduce using rule 11 (types)
+
+    types  go to state 28
 
 
 State 24
 
-    8 domain_types: types . tRPAREN
+    8 domain_types: tLPAREN types . tRPAREN
 
-    tRPAREN  shift, and go to state 28
+    tRPAREN  shift, and go to state 29
 
 
 State 25
+
+   12 predicates_def: tLPAREN . list_predicates tRPAREN
+
+    kPREDICATES  shift, and go to state 30
+
+    list_predicates  go to state 31
+
+
+State 26
+
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def . tRPAREN
+
+    tRPAREN  shift, and go to state 32
+
+
+State 27
 
     9 types: kTYPES types .
 
     $default  reduce using rule 9 (types)
 
 
-State 26
+State 28
 
    10 types: tSTRING types .
 
     $default  reduce using rule 10 (types)
 
 
-State 27
+State 29
 
-    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN tLPAREN domain_definitions tLPAREN domain_types tRPAREN .
+    8 domain_types: tLPAREN types tRPAREN .
+
+    $default  reduce using rule 8 (domain_types)
+
+
+State 30
+
+   13 list_predicates: kPREDICATES . list_atomic_formula_skeleton
+
+    tLPAREN  shift, and go to state 33
+
+    $default  reduce using rule 15 (list_atomic_formula_skeleton)
+
+    list_atomic_formula_skeleton  go to state 34
+    atomic_formula_skeleton       go to state 35
+
+
+State 31
+
+   12 predicates_def: tLPAREN list_predicates . tRPAREN
+
+    tRPAREN  shift, and go to state 36
+
+
+State 32
+
+    1 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN domain_definitions domain_types predicates_def tRPAREN .
 
     $default  reduce using rule 1 (start)
 
 
-State 28
+State 33
 
-    8 domain_types: types tRPAREN .
+   16 atomic_formula_skeleton: tLPAREN . predicate typed_list tRPAREN
 
-    $default  reduce using rule 8 (domain_types)
+    tSTRING  shift, and go to state 37
+
+    predicate  go to state 38
+
+
+State 34
+
+   13 list_predicates: kPREDICATES list_atomic_formula_skeleton .
+
+    $default  reduce using rule 13 (list_predicates)
+
+
+State 35
+
+   14 list_atomic_formula_skeleton: atomic_formula_skeleton . list_atomic_formula_skeleton
+
+    tLPAREN  shift, and go to state 33
+
+    $default  reduce using rule 15 (list_atomic_formula_skeleton)
+
+    list_atomic_formula_skeleton  go to state 39
+    atomic_formula_skeleton       go to state 35
+
+
+State 36
+
+   12 predicates_def: tLPAREN list_predicates tRPAREN .
+
+    $default  reduce using rule 12 (predicates_def)
+
+
+State 37
+
+   22 predicate: tSTRING .
+
+    $default  reduce using rule 22 (predicate)
+
+
+State 38
+
+   16 atomic_formula_skeleton: tLPAREN predicate . typed_list tRPAREN
+
+    tHYPHEN    shift, and go to state 40
+    tVARIABLE  shift, and go to state 41
+
+    tRPAREN    reduce using rule 19 (typed_list)
+    tRPAREN    [reduce using rule 21 (variable)]
+    tHYPHEN    [reduce using rule 21 (variable)]
+    tVARIABLE  [reduce using rule 21 (variable)]
+    $default   reduce using rule 19 (typed_list)
+
+    typed_list  go to state 42
+    variable    go to state 43
+
+
+State 39
+
+   14 list_atomic_formula_skeleton: atomic_formula_skeleton list_atomic_formula_skeleton .
+
+    $default  reduce using rule 14 (list_atomic_formula_skeleton)
+
+
+State 40
+
+   17 typed_list: tHYPHEN . type typed_list
+
+    tSTRING  shift, and go to state 44
+
+    type  go to state 45
+
+
+State 41
+
+   20 variable: tVARIABLE . variable
+
+    tVARIABLE  shift, and go to state 41
+
+    tVARIABLE  [reduce using rule 21 (variable)]
+    $default   reduce using rule 21 (variable)
+
+    variable  go to state 46
+
+
+State 42
+
+   16 atomic_formula_skeleton: tLPAREN predicate typed_list . tRPAREN
+
+    tRPAREN  shift, and go to state 47
+
+
+State 43
+
+   18 typed_list: variable . typed_list
+
+    tHYPHEN    shift, and go to state 40
+    tVARIABLE  shift, and go to state 41
+
+    tRPAREN    reduce using rule 19 (typed_list)
+    tRPAREN    [reduce using rule 21 (variable)]
+    tHYPHEN    [reduce using rule 21 (variable)]
+    tVARIABLE  [reduce using rule 21 (variable)]
+    $default   reduce using rule 19 (typed_list)
+
+    typed_list  go to state 48
+    variable    go to state 43
+
+
+State 44
+
+   23 type: tSTRING .
+
+    $default  reduce using rule 23 (type)
+
+
+State 45
+
+   17 typed_list: tHYPHEN type . typed_list
+
+    tHYPHEN    shift, and go to state 40
+    tVARIABLE  shift, and go to state 41
+
+    tRPAREN    reduce using rule 19 (typed_list)
+    tRPAREN    [reduce using rule 21 (variable)]
+    tHYPHEN    [reduce using rule 21 (variable)]
+    tVARIABLE  [reduce using rule 21 (variable)]
+    $default   reduce using rule 19 (typed_list)
+
+    typed_list  go to state 49
+    variable    go to state 43
+
+
+State 46
+
+   20 variable: tVARIABLE variable .
+
+    $default  reduce using rule 20 (variable)
+
+
+State 47
+
+   16 atomic_formula_skeleton: tLPAREN predicate typed_list tRPAREN .
+
+    $default  reduce using rule 16 (atomic_formula_skeleton)
+
+
+State 48
+
+   18 typed_list: variable typed_list .
+
+    $default  reduce using rule 18 (typed_list)
+
+
+State 49
+
+   17 typed_list: tHYPHEN type typed_list .
+
+    $default  reduce using rule 17 (typed_list)

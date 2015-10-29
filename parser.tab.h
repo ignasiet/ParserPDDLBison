@@ -47,14 +47,17 @@ extern int yydebug;
   {
     tLPAREN = 258,
     tRPAREN = 259,
-    kREQUIREMENTS = 260,
-    kTYPING = 261,
-    kSTRIPS = 262,
-    kTYPES = 263,
-    kDEFINE = 264,
-    kDOMAIN = 265,
-    kPROBLEM = 266,
-    tSTRING = 267
+    tHYPHEN = 260,
+    tVARIABLE = 261,
+    kREQUIREMENTS = 262,
+    kTYPING = 263,
+    kSTRIPS = 264,
+    kTYPES = 265,
+    kPREDICATES = 266,
+    kDEFINE = 267,
+    kDOMAIN = 268,
+    kPROBLEM = 269,
+    tSTRING = 270
   };
 #endif
 
@@ -63,13 +66,13 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 14 "parser.y" /* yacc.c:1909  */
+#line 15 "parser.y" /* yacc.c:1909  */
 
   int ival;
   float fval;
   char *sval;
 
-#line 73 "parser.tab.h" /* yacc.c:1909  */
+#line 76 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
