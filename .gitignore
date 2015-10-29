@@ -30,3 +30,7 @@
 
 # Debug files
 *.dSYM/
+
+# Pddl files
+*.pddl
+/Pddl files

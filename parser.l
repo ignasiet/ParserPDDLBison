@@ -19,6 +19,11 @@ STRING {CHAR}+(-|{CHAR}|{DIGIT})*
 domain { KEYWORD(DOMAIN);}
 define { KEYWORD(DEFINE);}
 problem { KEYWORD(PROBLEM);}
+:requirements { KEYWORD(REQUIREMENTS);}
+:strips { KEYWORD(STRIPS);}
+:typing { KEYWORD(TYPING);}
+:types { KEYWORD(TYPES);}
+:predicates { KEYWORD(PREDICATES);}
 #.*$ {}
 \(  { TOKEN(LPAREN); }
 \)  { TOKEN(RPAREN); }
