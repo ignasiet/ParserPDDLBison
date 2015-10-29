@@ -1,0 +1,8 @@
+<atomic function skeleton> ::= (<function - symbol> <typed list (variable)>)
+<typed list (x)> ::= x*
+<typed list (x)> ::= x + - <type> <typed list(x)>
+
+<primitive-type> ::= <name>
+<primitive-type> ::= object
+<type> ::= (either <primitive-type> +)
+<type> ::= <primitive-type>

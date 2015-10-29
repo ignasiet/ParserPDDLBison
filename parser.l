@@ -29,6 +29,7 @@ problem { KEYWORD(PROBLEM);}
 \)  { TOKEN(RPAREN); }
 [\t ] {}
 \n {}
+\- {TOKEN(HYPHEN);}
 {STRING}   { yylval.sval = strdup(yytext); TOKEN(STRING); }
 
 . { fprintf(stderr, "Unknown token '%s'\n", yytext); }

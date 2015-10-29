@@ -1,4 +1,8 @@
 (define (domain wumpus)
   (:requirements :strips :typing)
   (:types pos )
+  (:predicates (adj ?i ?j - pos) (at ?i - pos) (safe ?i - pos)
+               (wumpus-at ?x - pos) (alive) (stench ?i - pos)
+               (gold-at ?i - pos) (got-the-treasure)
+               (breeze ?i - pos) (pit-at ?p - pos) )
 )

@@ -9,6 +9,7 @@
 
   char str_requirements[80];
   char str_types[80];
+  char str_predicate[80];
 %}
 
 %union {
@@ -19,7 +20,7 @@
 
 
 
-%token tLPAREN tRPAREN
+%token tLPAREN tRPAREN tHYPHEN
 %token kREQUIREMENTS kTYPING kSTRIPS kTYPES kPREDICATES
 %token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING
 
@@ -50,10 +51,18 @@ types:  kTYPES types
   |
   ;
 
-domain_predicates: tLPAREN kPREDICATES predicates tRPAREN
+domain_predicates: tLPAREN list_predicates tRPAREN
 
-predicates: predicate
+list_predicates: kPREDICATES atomic_formula_skeleton
+  | predicate_elem list_predicates
+  |
   ;
+
+atomic_formula_skeleton: tSTRING typed_list
+
+typed_list:
+ |
+ ;
 
 %%
 
