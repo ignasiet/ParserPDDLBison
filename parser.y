@@ -78,6 +78,7 @@ typed_list: variable typed_list
 
 variable: tVARIABLE
 
+/*Contants*/
 constants_def: tLPAREN list_constants tRPAREN
   |
   ;
