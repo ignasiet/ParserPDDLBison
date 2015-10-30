@@ -21,7 +21,8 @@
 
 
 %token tLPAREN tRPAREN tHYPHEN tVARIABLE
-%token kREQUIREMENTS kTYPING kSTRIPS kTYPES kPREDICATES
+%token kREQUIREMENTS kTYPING kSTRIPS kTYPES kPREDICATES kCONSTANTS
+%token kACTION kPARAMETERS kPRECONDITION kEFFECT kAND kNOT kOBSERVE
 %token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING
 
 %type <sval> domain_name
@@ -34,6 +35,8 @@ start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN
   domain_definitions
   domain_types
   predicates_def
+  constants_def
+  actions_def
   tRPAREN {printf("Domain: %s\n", $5);}
   ;
 
@@ -59,24 +62,54 @@ predicates_def: tLPAREN list_predicates tRPAREN
 
 list_predicates: kPREDICATES list_atomic_formula_skeleton
 
+/*Formulas*/
 list_atomic_formula_skeleton: atomic_formula_skeleton list_atomic_formula_skeleton
   |
   ;
 
-atomic_formula_skeleton: tLPAREN predicate typed_list tRPAREN
+atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
+  | tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN
+  ;
 
-typed_list: tHYPHEN type typed_list
- | variable typed_list
+typed_list: variable typed_list
+ | tHYPHEN terminal_string typed_list
  |
  ;
 
-variable: tVARIABLE variable
+variable: tVARIABLE
+
+constants_def: tLPAREN list_constants tRPAREN
   |
   ;
 
-predicate : tSTRING
+list_constants: kCONSTANTS constants_list
 
-type: tSTRING
+constants_list: tSTRING constants_list
+  | tHYPHEN terminal_string constants_list
+  |
+  ;
+
+/*Actions*/
+actions_def: action_def actions_def
+  |
+  ;
+
+action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN
+
+parameters_action: kPARAMETERS tLPAREN typed_list tRPAREN
+
+action_def_body: kPRECONDITION tLPAREN action_predicates tRPAREN action_result
+
+action_result: kEFFECT tLPAREN action_predicates tRPAREN
+  | kOBSERVE action_predicates
+
+action_predicates: kAND atomic_formula_skeleton action_predicates
+  | atomic_formula_skeleton action_predicates
+  |
+  ;
+
+/*Terminal leafs*/
+terminal_string: tSTRING
 
 %%
 

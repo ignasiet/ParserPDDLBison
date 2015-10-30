@@ -15,7 +15,7 @@ DIGIT [0-9]
 NUMBER [0-9](_[0-9]|[0-9])*
 STRING {CHAR}+(-|{CHAR}|{DIGIT})*
 QUESTION_TAG \?
-VARIABLE {QUESTION_TAG}+{CHAR}
+VARIABLE {QUESTION_TAG}+(-|{CHAR}|{DIGIT})*
 
 %%
 domain { KEYWORD(DOMAIN);}
@@ -26,6 +26,14 @@ problem { KEYWORD(PROBLEM);}
 :typing { KEYWORD(TYPING);}
 :types { KEYWORD(TYPES);}
 :predicates { KEYWORD(PREDICATES);}
+:constants { KEYWORD(CONSTANTS);}
+:parameters { KEYWORD(PARAMETERS);}
+:action { KEYWORD(ACTION);}
+:precondition { KEYWORD(PRECONDITION);}
+:effect { KEYWORD(EFFECT);}
+:observe {KEYWORD(OBSERVE);}
+and {KEYWORD(AND);}
+not {KEYWORD(NOT);}
 #.*$ {}
 \(  { TOKEN(LPAREN); }
 \)  { TOKEN(RPAREN); }

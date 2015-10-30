@@ -54,10 +54,18 @@ extern int yydebug;
     kSTRIPS = 264,
     kTYPES = 265,
     kPREDICATES = 266,
-    kDEFINE = 267,
-    kDOMAIN = 268,
-    kPROBLEM = 269,
-    tSTRING = 270
+    kCONSTANTS = 267,
+    kACTION = 268,
+    kPARAMETERS = 269,
+    kPRECONDITION = 270,
+    kEFFECT = 271,
+    kAND = 272,
+    kNOT = 273,
+    kOBSERVE = 274,
+    kDEFINE = 275,
+    kDOMAIN = 276,
+    kPROBLEM = 277,
+    tSTRING = 278
   };
 #endif
 
@@ -72,7 +80,7 @@ union YYSTYPE
   float fval;
   char *sval;
 
-#line 76 "parser.tab.h" /* yacc.c:1909  */
+#line 84 "parser.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
