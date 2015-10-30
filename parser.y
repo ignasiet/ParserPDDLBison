@@ -34,10 +34,14 @@
 start: tLPAREN kDEFINE tLPAREN kDOMAIN domain_name tRPAREN
   domain_definitions
   domain_types
-  predicates_def
-  constants_def
-  actions_def
+  domain_body
   tRPAREN {printf("Domain: %s\n", $5);}
+  ;
+
+domain_body: predicates_def domain_body
+  | constants_def domain_body
+  | action_def domain_body
+  |
   ;
 
 domain_name: tSTRING {$$ = $1;}
@@ -51,6 +55,7 @@ definition:  kREQUIREMENTS definition
   |
   ;
 
+/*Types*/
 domain_types: tLPAREN types tRPAREN {printf("Parsed types: %s\n", str_types);}
 
 types:  kTYPES types
@@ -78,10 +83,8 @@ typed_list: variable typed_list
 
 variable: tVARIABLE
 
-/*Contants*/
+/*Constants*/
 constants_def: tLPAREN list_constants tRPAREN
-  |
-  ;
 
 list_constants: kCONSTANTS constants_list
 
@@ -91,15 +94,14 @@ constants_list: tSTRING constants_list
   ;
 
 /*Actions*/
-actions_def: action_def actions_def
-  |
-  ;
-
 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN
 
 parameters_action: kPARAMETERS tLPAREN typed_list tRPAREN
 
-action_def_body: kPRECONDITION tLPAREN action_predicates tRPAREN action_result
+action_def_body: action_preconditions action_result
+
+action_preconditions: kPRECONDITION tLPAREN action_predicates tRPAREN
+  | kPRECONDITION action_predicates
 
 action_result: kEFFECT tLPAREN action_predicates tRPAREN
   | kOBSERVE action_predicates
