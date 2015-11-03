@@ -567,13 +567,18 @@ int yy_flex_debug = 0;
 char *yytext;
 #line 1 "parser.l"
 #line 2 "parser.l"
+  #include <iostream>
+  #include <cctype>
+  // Bring the standard library into the
+  // global namespace
+  using namespace std;
   #include <stdio.h>
   #include <string.h>
   #include "parser.tab.h"
   #define TOKEN(id) return t##id
   #define KEYWORD(id) return k##id
   extern void yyerror(const char *s);
-#line 577 "lex.yy.c"
+#line 582 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -760,9 +765,9 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
     
-#line 20 "parser.l"
+#line 25 "parser.l"
 
-#line 766 "lex.yy.c"
+#line 771 "lex.yy.c"
 
 	if ( !(yy_init) )
 		{
@@ -857,82 +862,82 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 21 "parser.l"
+#line 26 "parser.l"
 { KEYWORD(DOMAIN);}
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 22 "parser.l"
+#line 27 "parser.l"
 { KEYWORD(DEFINE);}
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 23 "parser.l"
+#line 28 "parser.l"
 { KEYWORD(PROBLEM);}
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 24 "parser.l"
+#line 29 "parser.l"
 { KEYWORD(REQUIREMENTS);}
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 25 "parser.l"
+#line 30 "parser.l"
 { KEYWORD(STRIPS);}
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 26 "parser.l"
+#line 31 "parser.l"
 { KEYWORD(TYPING);}
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 27 "parser.l"
+#line 32 "parser.l"
 { KEYWORD(TYPES);}
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 28 "parser.l"
+#line 33 "parser.l"
 { KEYWORD(PREDICATES);}
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 29 "parser.l"
+#line 34 "parser.l"
 { KEYWORD(CONSTANTS);}
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 30 "parser.l"
+#line 35 "parser.l"
 { KEYWORD(PARAMETERS);}
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 31 "parser.l"
+#line 36 "parser.l"
 { KEYWORD(ACTION);}
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 32 "parser.l"
+#line 37 "parser.l"
 { KEYWORD(PRECONDITION);}
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 33 "parser.l"
+#line 38 "parser.l"
 { KEYWORD(EFFECT);}
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 34 "parser.l"
+#line 39 "parser.l"
 {KEYWORD(OBSERVE);}
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 35 "parser.l"
+#line 40 "parser.l"
 {KEYWORD(AND);}
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 36 "parser.l"
+#line 41 "parser.l"
 {KEYWORD(NOT);}
 	YY_BREAK
 case 17:
@@ -940,56 +945,56 @@ case 17:
 (yy_c_buf_p) = yy_cp -= 1;
 YY_DO_BEFORE_ACTION; /* set up yytext again */
 YY_RULE_SETUP
-#line 37 "parser.l"
+#line 42 "parser.l"
 {}
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 38 "parser.l"
+#line 43 "parser.l"
 { TOKEN(LPAREN); }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 39 "parser.l"
+#line 44 "parser.l"
 { TOKEN(RPAREN); }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 40 "parser.l"
+#line 45 "parser.l"
 {}
 	YY_BREAK
 case 21:
 /* rule 21 can match eol */
 YY_RULE_SETUP
-#line 41 "parser.l"
+#line 46 "parser.l"
 {}
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 42 "parser.l"
+#line 47 "parser.l"
 {TOKEN(HYPHEN);}
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 43 "parser.l"
+#line 48 "parser.l"
 {yylval.sval = strdup(yytext); TOKEN(VARIABLE);}
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 44 "parser.l"
+#line 49 "parser.l"
 { yylval.sval = strdup(yytext); TOKEN(STRING); }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 46 "parser.l"
+#line 51 "parser.l"
 { fprintf(stderr, "Unknown token '%s'\n", yytext); }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 47 "parser.l"
+#line 52 "parser.l"
 ECHO;
 	YY_BREAK
-#line 993 "lex.yy.c"
+#line 998 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1999,15 +2004,16 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 47 "parser.l"
+#line 52 "parser.l"
 
 
 
 void yyerror(char const *s) {
-  fprintf(stderr,
-          "%s. Unexpected \"%s\" on line %d\n",
-          s,
-          yytext,
-          yylineno);
+  // fprintf(stderr,
+  //         "%s. Unexpected \"%s\" on line %d\n",
+  //         s,
+  //         yytext,
+  //         yylineno);
+  cout << s << endl;
 }
 

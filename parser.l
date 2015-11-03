@@ -1,4 +1,9 @@
 %{
+  #include <iostream>
+  #include <cctype>
+  // Bring the standard library into the
+  // global namespace
+  using namespace std;
   #include <stdio.h>
   #include <string.h>
   #include "parser.tab.h"
@@ -47,9 +52,10 @@ not {KEYWORD(NOT);}
 %%
 
 void yyerror(char const *s) {
-  fprintf(stderr,
-          "%s. Unexpected \"%s\" on line %d\n",
-          s,
-          yytext,
-          yylineno);
+  // fprintf(stderr,
+  //         "%s. Unexpected \"%s\" on line %d\n",
+  //         s,
+  //         yytext,
+  //         yylineno);
+  cout << s << endl;
 }

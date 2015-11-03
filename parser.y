@@ -1,9 +1,15 @@
 %{
-  #include <stdio.h>
   #include <string.h>
+  #include <iostream>
+  #include <stdio.h>
+  // Bring the standard library into the
+  // global namespace
+  using namespace std;
+
   #define YYERROR_VERBOSE 1
   extern FILE* yyin;
   extern int yyparse(void);
+  extern FILE *yyin;
   extern void yyerror(char const*);
   extern int yylex(void);
 
@@ -12,10 +18,15 @@
   char str_predicate[80];
 %}
 
+%code requires {
+  #include "./Classes/Atom.h"
+}
+
 %union {
   int ival;
   float fval;
   char *sval;
+  Atom *atom;
 }
 
 
@@ -26,6 +37,7 @@
 %token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING
 
 %type <sval> domain_name
+%type <atom> terminal_string
 
 %start start
 
@@ -72,9 +84,12 @@ list_atomic_formula_skeleton: atomic_formula_skeleton list_atomic_formula_skelet
   |
   ;
 
-atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
+atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN {
+  cout << $2->name() << endl;
+}
   | tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN
-  ;
+  {$4->negate();
+  cout << $4->name() << endl;};
 
 typed_list: variable typed_list
  | tHYPHEN terminal_string typed_list
@@ -112,7 +127,11 @@ action_predicates: kAND atomic_formula_skeleton action_predicates
   ;
 
 /*Terminal leafs*/
-terminal_string: tSTRING
+terminal_string: tSTRING {
+  string st = $1;
+  Atom* a = new Atom(st);
+  $$ = a;
+}
 
 %%
 
