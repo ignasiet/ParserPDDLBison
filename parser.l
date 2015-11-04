@@ -6,6 +6,7 @@
   using namespace std;
   #include <stdio.h>
   #include <string.h>
+  #include <list>
   #include "parser.tab.h"
   #define TOKEN(id) return t##id
   #define KEYWORD(id) return k##id

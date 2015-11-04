@@ -1,13 +1,16 @@
 all: pddl
 
-pddl: parser.tab.c lex.yy.c Atom.o
-	g++ -Wall -g -o pddl lex.yy.c parser.tab.c Atom.o
+pddl: parser.tab.c lex.yy.c Variable.o Predicate.o
+	g++ -Wall -g -o pddl lex.yy.c parser.tab.c Variable.o Predicate.o 
 
 lex.yy.c: parser.l
 	flex parser.l
 
-Atom.o: ./Classes/Atom.h
-	g++ -Wall ./Classes/Atom.cpp -c
+Predicate.o: ./Classes/Predicate.h
+	g++ -Wall ./Classes/Predicate.cpp -c
+
+Variable.o: ./Classes/Variable.h
+	g++ -Wall ./Classes/Variable.cpp -c
 
 parser.tab.c: parser.y
 	bison -v -d  parser.y

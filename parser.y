@@ -2,6 +2,8 @@
   #include <string.h>
   #include <iostream>
   #include <stdio.h>
+  #include <list>
+
   // Bring the standard library into the
   // global namespace
   using namespace std;
@@ -19,25 +21,25 @@
 %}
 
 %code requires {
-  #include "./Classes/Atom.h"
+  #include "./Classes/Predicate.h"
 }
 
 %union {
   int ival;
   float fval;
   char *sval;
-  Atom *atom;
+  Predicate *predicate;
+  Variable *var;
 }
 
-
-
-%token tLPAREN tRPAREN tHYPHEN tVARIABLE
+%token tLPAREN tRPAREN tHYPHEN
 %token kREQUIREMENTS kTYPING kSTRIPS kTYPES kPREDICATES kCONSTANTS
 %token kACTION kPARAMETERS kPRECONDITION kEFFECT kAND kNOT kOBSERVE
-%token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING
+%token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING tVARIABLE
 
-%type <sval> domain_name
-%type <atom> terminal_string
+%type <sval> domain_name terminal_type_string terminal_string
+%type <predicate> actions_typed_list
+%type <var> variable
 
 %start start
 
@@ -84,19 +86,51 @@ list_atomic_formula_skeleton: atomic_formula_skeleton list_atomic_formula_skelet
   |
   ;
 
-atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN {
-  cout << $2->name() << endl;
-}
+atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
   | tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN
-  {$4->negate();
-  cout << $4->name() << endl;};
+  ;
 
+action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN {
+  string st = $2;
+  cout << st << endl;
+  $3->set_name($2);
+  cout << $3->name() << endl;
+}
+  | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
+  { cout << $4 << endl;
+    $5->set_name($4);
+    $5->negate();
+  cout << $5->name() << endl;
+};
+
+/*Variables ?i*/
 typed_list: variable typed_list
- | tHYPHEN terminal_string typed_list
+ | tHYPHEN terminal_type_string typed_list
  |
  ;
 
-variable: tVARIABLE
+actions_typed_list: variable actions_typed_list{
+  $2->add_parameter($1);
+  $$ = $2;
+}
+ |{
+   Predicate* v = new Predicate();
+   $$ = v;
+ }
+ ;
+
+variable: tVARIABLE {
+  string st = $1;
+  Variable* v = new Variable(st);
+  $$ = v;
+}
+
+/*Parameters variable*/
+parameter_typed_list: variable tHYPHEN terminal_type_string parameter_typed_list {
+  $1->set_type($3);
+}
+  |
+  ;
 
 /*Constants*/
 constants_def: tLPAREN list_constants tRPAREN
@@ -111,26 +145,31 @@ constants_list: tSTRING constants_list
 /*Actions*/
 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN
 
-parameters_action: kPARAMETERS tLPAREN typed_list tRPAREN
+parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN
 
 action_def_body: action_preconditions action_result
 
+/*Action preconditions*/
 action_preconditions: kPRECONDITION tLPAREN action_predicates tRPAREN
   | kPRECONDITION action_predicates
 
+
+/*Action Effects*/
 action_result: kEFFECT tLPAREN action_predicates tRPAREN
   | kOBSERVE action_predicates
 
-action_predicates: kAND atomic_formula_skeleton action_predicates
-  | atomic_formula_skeleton action_predicates
+action_predicates: kAND action_formula_skeleton action_predicates
+  | action_formula_skeleton action_predicates
   |
   ;
 
 /*Terminal leafs*/
 terminal_string: tSTRING {
-  string st = $1;
-  Atom* a = new Atom(st);
-  $$ = a;
+  $$ = $1;
+}
+
+terminal_type_string: tSTRING {
+  $$ = $1;
 }
 
 %%
