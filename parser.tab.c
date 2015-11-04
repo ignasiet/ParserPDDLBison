@@ -70,7 +70,7 @@
   // Bring the standard library into the
   // global namespace
   using namespace std;
-
+  #include "./Classes/Atom.h"
   #define YYERROR_VERBOSE 1
   extern FILE* yyin;
   extern int yyparse(void);
@@ -111,12 +111,6 @@
 #if YYDEBUG
 extern int yydebug;
 #endif
-/* "%code requires" blocks.  */
-#line 21 "parser.y" /* yacc.c:355  */
-
-  #include "./Classes/Atom.h"
-
-#line 120 "parser.tab.c" /* yacc.c:355  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -152,14 +146,14 @@ extern int yydebug;
 typedef union YYSTYPE YYSTYPE;
 union YYSTYPE
 {
-#line 25 "parser.y" /* yacc.c:355  */
+#line 21 "parser.y" /* yacc.c:355  */
 
   int ival;
   float fval;
   char *sval;
   Atom *atom;
 
-#line 163 "parser.tab.c" /* yacc.c:355  */
+#line 157 "parser.tab.c" /* yacc.c:355  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
@@ -174,7 +168,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 178 "parser.tab.c" /* yacc.c:358  */
+#line 172 "parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -473,11 +467,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    46,    46,    53,    54,    55,    56,    59,    62,    64,
-      65,    66,    67,    71,    73,    74,    75,    78,    80,    83,
-      84,    87,    90,    94,    95,    96,    99,   102,   104,   106,
-     107,   108,   112,   114,   116,   118,   119,   121,   122,   124,
-     125,   126,   130
+       0,    42,    42,    49,    50,    51,    52,    55,    58,    60,
+      61,    62,    63,    67,    69,    70,    71,    74,    76,    79,
+      80,    83,    84,    87,    88,    89,    92,    95,    97,    99,
+     100,   101,   105,   107,   109,   111,   112,   114,   115,   117,
+     118,   119,   123
 };
 #endif
 
@@ -1309,74 +1303,59 @@ yyreduce:
   switch (yyn)
     {
         case 2:
-#line 50 "parser.y" /* yacc.c:1646  */
+#line 46 "parser.y" /* yacc.c:1646  */
     {printf("Domain: %s\n", (yyvsp[-5].sval));}
-#line 1315 "parser.tab.c" /* yacc.c:1646  */
+#line 1309 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 59 "parser.y" /* yacc.c:1646  */
+#line 55 "parser.y" /* yacc.c:1646  */
     {(yyval.sval) = (yyvsp[0].sval);}
-#line 1321 "parser.tab.c" /* yacc.c:1646  */
+#line 1315 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
-#line 62 "parser.y" /* yacc.c:1646  */
+#line 58 "parser.y" /* yacc.c:1646  */
     {printf("Parsed requirements: %s\n", str_requirements);}
-#line 1327 "parser.tab.c" /* yacc.c:1646  */
+#line 1321 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 65 "parser.y" /* yacc.c:1646  */
+#line 61 "parser.y" /* yacc.c:1646  */
     {strcat(str_requirements, "types ");}
-#line 1333 "parser.tab.c" /* yacc.c:1646  */
+#line 1327 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
-#line 66 "parser.y" /* yacc.c:1646  */
+#line 62 "parser.y" /* yacc.c:1646  */
     {strcat(str_requirements, "strips ");}
-#line 1339 "parser.tab.c" /* yacc.c:1646  */
+#line 1333 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 13:
-#line 71 "parser.y" /* yacc.c:1646  */
+#line 67 "parser.y" /* yacc.c:1646  */
     {printf("Parsed types: %s\n", str_types);}
-#line 1345 "parser.tab.c" /* yacc.c:1646  */
+#line 1339 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 15:
-#line 74 "parser.y" /* yacc.c:1646  */
+#line 70 "parser.y" /* yacc.c:1646  */
     {strcat(str_types, (yyvsp[-1].sval));}
-#line 1351 "parser.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 21:
-#line 87 "parser.y" /* yacc.c:1646  */
-    {
-  cout << (yyvsp[-2].atom)->name() << endl;
-}
-#line 1359 "parser.tab.c" /* yacc.c:1646  */
-    break;
-
-  case 22:
-#line 91 "parser.y" /* yacc.c:1646  */
-    {(yyvsp[-3].atom)->negate();
-  cout << (yyvsp[-3].atom)->name() << endl;}
-#line 1366 "parser.tab.c" /* yacc.c:1646  */
+#line 1345 "parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
-#line 130 "parser.y" /* yacc.c:1646  */
+#line 123 "parser.y" /* yacc.c:1646  */
     {
   string st = (yyvsp[0].sval);
   Atom* a = new Atom(st);
   (yyval.atom) = a;
 }
-#line 1376 "parser.tab.c" /* yacc.c:1646  */
+#line 1355 "parser.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1380 "parser.tab.c" /* yacc.c:1646  */
+#line 1359 "parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1604,7 +1583,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 136 "parser.y" /* yacc.c:1906  */
+#line 129 "parser.y" /* yacc.c:1906  */
 
 
 int main(int argc, char *argv[]) {

@@ -34,3 +34,7 @@
 # Pddl files
 *.pddl
 /Pddl files
+
+#Output lex and bison files
+*.tab.*
+*.yy.*
