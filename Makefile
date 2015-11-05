@@ -1,7 +1,7 @@
 all: pddl
 
-pddl: parser.tab.c lex.yy.c Variable.o Predicate.o
-	g++ -Wall -g -o pddl lex.yy.c parser.tab.c Variable.o Predicate.o 
+pddl: parser.tab.c lex.yy.c Variable.o Predicate.o Preconditions.o
+	g++ -Wall -g -o pddl lex.yy.c parser.tab.c Variable.o Predicate.o Preconditions.o
 
 lex.yy.c: parser.l
 	flex parser.l
@@ -11,6 +11,9 @@ Predicate.o: ./Classes/Predicate.h
 
 Variable.o: ./Classes/Variable.h
 	g++ -Wall ./Classes/Variable.cpp -c
+
+Preconditions.o: ./Classes/Preconditions.h
+	g++ -Wall ./Classes/Preconditions.cpp -c
 
 parser.tab.c: parser.y
 	bison -v -d  parser.y

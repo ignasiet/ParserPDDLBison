@@ -21,7 +21,7 @@
 %}
 
 %code requires {
-  #include "./Classes/Predicate.h"
+  #include "./Classes/Preconditions.h"
 }
 
 %union {
@@ -30,6 +30,7 @@
   char *sval;
   Predicate *predicate;
   Variable *var;
+  Preconditions *prec;
 }
 
 %token tLPAREN tRPAREN tHYPHEN
@@ -38,8 +39,9 @@
 %token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING tVARIABLE
 
 %type <sval> domain_name terminal_type_string terminal_string
-%type <predicate> actions_typed_list
+%type <predicate> actions_typed_list action_formula_skeleton
 %type <var> variable
+%type <prec> action_preconditions_predicates
 
 %start start
 
@@ -92,15 +94,13 @@ atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
 
 action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN {
   string st = $2;
-  cout << st << endl;
   $3->set_name($2);
-  cout << $3->name() << endl;
+  $$ = $3;
 }
-  | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
-  { cout << $4 << endl;
-    $5->set_name($4);
-    $5->negate();
-  cout << $5->name() << endl;
+  | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN {
+  $5->set_name($4);
+  $5->negate();
+  $$ = $5;
 };
 
 /*Variables ?i*/
@@ -150,18 +150,36 @@ parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN
 action_def_body: action_preconditions action_result
 
 /*Action preconditions*/
-action_preconditions: kPRECONDITION tLPAREN action_predicates tRPAREN
-  | kPRECONDITION action_predicates
+action_preconditions: kPRECONDITION tLPAREN action_preconditions_predicates tRPAREN {
+  cout << $3->print_preconditions() << endl;
+}
+  | kPRECONDITION action_preconditions_predicates{
+    cout << $2->print_preconditions() << endl;
+  }
 
 
 /*Action Effects*/
 action_result: kEFFECT tLPAREN action_predicates tRPAREN
   | kOBSERVE action_predicates
 
-action_predicates: kAND action_formula_skeleton action_predicates
-  | action_formula_skeleton action_predicates
-  |
+action_preconditions_predicates: kAND action_formula_skeleton action_preconditions_predicates{
+  $3->add_predicate($2);
+  $$ = $3;
+}
+  | action_formula_skeleton action_preconditions_predicates {
+    $2->add_predicate($1);
+    $$ = $2;
+  }
+  | {
+    Preconditions* v = new Preconditions();
+    $$ = v;
+  }
   ;
+
+  action_predicates: kAND action_formula_skeleton action_predicates
+    | action_formula_skeleton action_predicates
+    |
+    ;
 
 /*Terminal leafs*/
 terminal_string: tSTRING {

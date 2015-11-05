@@ -24,12 +24,12 @@ string Predicate::name(){
   string return_string;
   if(Predicate::get_negated()){
     return_string = "Not " + predicate_name;
-    for(iter = list_parameters.begin(); iter != list_parameters.end(); iter++) {
-      cout << "Parameter: " << (*(*iter)).get_name() << endl;
-    }
   }
   else{
     return_string = predicate_name;
+  }
+  for(iter = list_parameters.begin(); iter != list_parameters.end(); iter++) {
+    return_string = return_string + "-Parameter: " + (*iter)->get_name() + " ";
   }
   return return_string;
 }
