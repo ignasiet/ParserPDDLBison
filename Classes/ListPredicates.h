@@ -1,15 +1,15 @@
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 #include "Predicate.h"
 
 using namespace std;
 
-class Preconditions {
+class ListPredicates {
     int count;
-    list<Predicate *> preconditions;
+    vector<Predicate *> predicates;
   public:
-    Preconditions ();
-    string print_preconditions();
+    ListPredicates ();
+    string print_predicates();
     void add_predicate(Predicate *);
 };

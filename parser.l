@@ -40,6 +40,7 @@ problem { KEYWORD(PROBLEM);}
 :observe {KEYWORD(OBSERVE);}
 and {KEYWORD(AND);}
 not {KEYWORD(NOT);}
+when {KEYWORD(WHEN);}
 #.*$ {}
 \(  { TOKEN(LPAREN); }
 \)  { TOKEN(RPAREN); }

@@ -3,6 +3,12 @@ Terminals unused in grammar
    kPROBLEM
 
 
+State 79 conflicts: 2 shift/reduce
+State 92 conflicts: 2 shift/reduce
+State 112 conflicts: 2 shift/reduce
+State 119 conflicts: 2 shift/reduce
+
+
 Grammar
 
     0 $accept: start $end
@@ -39,141 +45,150 @@ Grammar
    20 atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
    21                        | tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN
 
-   22 action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN
-   23                        | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
+   22 typed_list: variable typed_list
+   23           | tHYPHEN terminal_type_string typed_list
+   24           | %empty
 
-   24 typed_list: variable typed_list
-   25           | tHYPHEN terminal_type_string typed_list
-   26           | %empty
+   25 actions_typed_list: variable actions_typed_list
+   26                   | %empty
 
-   27 actions_typed_list: variable actions_typed_list
-   28                   | %empty
+   27 variable: tVARIABLE
 
-   29 variable: tVARIABLE
+   28 parameter_typed_list: variable tHYPHEN terminal_type_string parameter_typed_list
+   29                     | %empty
 
-   30 parameter_typed_list: variable tHYPHEN terminal_type_string parameter_typed_list
-   31                     | %empty
+   30 constants_def: tLPAREN list_constants tRPAREN
 
-   32 constants_def: tLPAREN list_constants tRPAREN
+   31 list_constants: kCONSTANTS constants_list
 
-   33 list_constants: kCONSTANTS constants_list
+   32 constants_list: tSTRING constants_list
+   33               | tHYPHEN terminal_string constants_list
+   34               | %empty
 
-   34 constants_list: tSTRING constants_list
-   35               | tHYPHEN terminal_string constants_list
-   36               | %empty
+   35 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN
 
-   37 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN
+   36 parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN
 
-   38 parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN
+   37 action_def_body: action_preconditions action_result
 
-   39 action_def_body: action_preconditions action_result
+   38 action_preconditions: kPRECONDITION tLPAREN list_fluents tRPAREN
+   39                     | kPRECONDITION list_fluents
 
-   40 action_preconditions: kPRECONDITION tLPAREN action_preconditions_predicates tRPAREN
-   41                     | kPRECONDITION action_preconditions_predicates
+   40 action_result: kEFFECT tLPAREN list_fluents tRPAREN
+   41              | kEFFECT tLPAREN conditional_effect tRPAREN
+   42              | kOBSERVE list_fluents
 
-   42 action_result: kEFFECT tLPAREN action_predicates tRPAREN
-   43              | kOBSERVE action_predicates
+   43 conditional_effect: kAND tLPAREN kWHEN condition effect tRPAREN
+   44                   | tLPAREN kWHEN condition effect tRPAREN
 
-   44 action_preconditions_predicates: kAND action_formula_skeleton action_preconditions_predicates
-   45                                | action_formula_skeleton action_preconditions_predicates
-   46                                | %empty
+   45 condition: list_fluents
 
-   47 action_predicates: kAND action_formula_skeleton action_predicates
-   48                  | action_formula_skeleton action_predicates
-   49                  | %empty
+   46 effect: list_fluents
 
-   50 terminal_string: tSTRING
+   47 list_fluents: kAND action_formula_skeleton list_fluents
+   48             | action_formula_skeleton list_fluents
+   49             | %empty
 
-   51 terminal_type_string: tSTRING
+   50 action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN
+   51                        | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
+
+   52 terminal_string: tSTRING
+
+   53 terminal_type_string: tSTRING
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-tLPAREN (258) 1 7 12 16 20 21 22 23 32 37 38 40 42
-tRPAREN (259) 1 7 12 16 20 21 22 23 32 37 38 40 42
-tHYPHEN (260) 25 30 35
+tLPAREN (258) 1 7 12 16 20 21 30 35 36 38 40 41 43 44 50 51
+tRPAREN (259) 1 7 12 16 20 21 30 35 36 38 40 41 43 44 50 51
+tHYPHEN (260) 23 28 33
 kREQUIREMENTS (261) 8
 kTYPING (262) 9
 kSTRIPS (263) 10
 kTYPES (264) 13
 kPREDICATES (265) 17
-kCONSTANTS (266) 33
-kACTION (267) 37
-kPARAMETERS (268) 38
-kPRECONDITION (269) 40 41
-kEFFECT (270) 42
-kAND (271) 44 47
-kNOT (272) 21 23
-kOBSERVE (273) 43
-kDEFINE (274) 1
-kDOMAIN (275) 1
-kPROBLEM (276)
-tSTRING (277) 6 14 34 50 51
-tVARIABLE (278) 29
+kCONSTANTS (266) 31
+kACTION (267) 35
+kPARAMETERS (268) 36
+kPRECONDITION (269) 38 39
+kEFFECT (270) 40 41
+kAND (271) 43 47
+kNOT (272) 21 51
+kOBSERVE (273) 42
+kWHEN (274) 43 44
+kDEFINE (275) 1
+kDOMAIN (276) 1
+kPROBLEM (277)
+tSTRING (278) 6 14 32 52 53
+tVARIABLE (279) 27
 
 
 Nonterminals, with rules where they appear
 
-$accept (24)
+$accept (25)
     on left: 0
-start (25)
+start (26)
     on left: 1, on right: 0
-domain_body (26)
+domain_body (27)
     on left: 2 3 4 5, on right: 1 2 3 4
-domain_name (27)
+domain_name (28)
     on left: 6, on right: 1
-domain_definitions (28)
+domain_definitions (29)
     on left: 7, on right: 1
-definition (29)
+definition (30)
     on left: 8 9 10 11, on right: 7 8 9 10
-domain_types (30)
+domain_types (31)
     on left: 12, on right: 1
-types (31)
+types (32)
     on left: 13 14 15, on right: 12 13 14
-predicates_def (32)
+predicates_def (33)
     on left: 16, on right: 2
-list_predicates (33)
+list_predicates (34)
     on left: 17, on right: 16
-list_atomic_formula_skeleton (34)
+list_atomic_formula_skeleton (35)
     on left: 18 19, on right: 17 18
-atomic_formula_skeleton (35)
+atomic_formula_skeleton (36)
     on left: 20 21, on right: 18
-action_formula_skeleton (36)
-    on left: 22 23, on right: 44 45 47 48
 typed_list (37)
-    on left: 24 25 26, on right: 20 21 24 25
+    on left: 22 23 24, on right: 20 21 22 23
 actions_typed_list (38)
-    on left: 27 28, on right: 22 23 27
+    on left: 25 26, on right: 25 50 51
 variable (39)
-    on left: 29, on right: 24 27 30
+    on left: 27, on right: 22 25 28
 parameter_typed_list (40)
-    on left: 30 31, on right: 30 38
+    on left: 28 29, on right: 28 36
 constants_def (41)
-    on left: 32, on right: 3
+    on left: 30, on right: 3
 list_constants (42)
-    on left: 33, on right: 32
+    on left: 31, on right: 30
 constants_list (43)
-    on left: 34 35 36, on right: 33 34 35
+    on left: 32 33 34, on right: 31 32 33
 action_def (44)
-    on left: 37, on right: 4
+    on left: 35, on right: 4
 parameters_action (45)
-    on left: 38, on right: 37
+    on left: 36, on right: 35
 action_def_body (46)
-    on left: 39, on right: 37
+    on left: 37, on right: 35
 action_preconditions (47)
-    on left: 40 41, on right: 39
+    on left: 38 39, on right: 37
 action_result (48)
-    on left: 42 43, on right: 39
-action_preconditions_predicates (49)
-    on left: 44 45 46, on right: 40 41 44 45
-action_predicates (50)
-    on left: 47 48 49, on right: 42 43 47 48
-terminal_string (51)
-    on left: 50, on right: 20 21 22 23 35 37
-terminal_type_string (52)
-    on left: 51, on right: 25 30
+    on left: 40 41 42, on right: 37
+conditional_effect (49)
+    on left: 43 44, on right: 41
+condition (50)
+    on left: 45, on right: 43 44
+effect (51)
+    on left: 46, on right: 43 44
+list_fluents (52)
+    on left: 47 48 49, on right: 38 39 40 42 45 46 47 48
+action_formula_skeleton (53)
+    on left: 50 51, on right: 47 48
+terminal_string (54)
+    on left: 52, on right: 20 21 33 35 50 51
+terminal_type_string (55)
+    on left: 53, on right: 23 28
 
 
 State 0
@@ -408,8 +423,8 @@ State 24
 State 25
 
    16 predicates_def: tLPAREN . list_predicates tRPAREN
-   32 constants_def: tLPAREN . list_constants tRPAREN
-   37 action_def: tLPAREN . kACTION terminal_string parameters_action action_def_body tRPAREN
+   30 constants_def: tLPAREN . list_constants tRPAREN
+   35 action_def: tLPAREN . kACTION terminal_string parameters_action action_def_body tRPAREN
 
     kPREDICATES  shift, and go to state 33
     kCONSTANTS   shift, and go to state 34
@@ -503,19 +518,19 @@ State 33
 
 State 34
 
-   33 list_constants: kCONSTANTS . constants_list
+   31 list_constants: kCONSTANTS . constants_list
 
     tHYPHEN  shift, and go to state 45
     tSTRING  shift, and go to state 46
 
-    $default  reduce using rule 36 (constants_list)
+    $default  reduce using rule 34 (constants_list)
 
     constants_list  go to state 47
 
 
 State 35
 
-   37 action_def: tLPAREN kACTION . terminal_string parameters_action action_def_body tRPAREN
+   35 action_def: tLPAREN kACTION . terminal_string parameters_action action_def_body tRPAREN
 
     tSTRING  shift, and go to state 48
 
@@ -531,7 +546,7 @@ State 36
 
 State 37
 
-   32 constants_def: tLPAREN list_constants . tRPAREN
+   30 constants_def: tLPAREN list_constants . tRPAREN
 
     tRPAREN  shift, and go to state 51
 
@@ -596,7 +611,7 @@ State 44
 
 State 45
 
-   35 constants_list: tHYPHEN . terminal_string constants_list
+   33 constants_list: tHYPHEN . terminal_string constants_list
 
     tSTRING  shift, and go to state 48
 
@@ -605,33 +620,33 @@ State 45
 
 State 46
 
-   34 constants_list: tSTRING . constants_list
+   32 constants_list: tSTRING . constants_list
 
     tHYPHEN  shift, and go to state 45
     tSTRING  shift, and go to state 46
 
-    $default  reduce using rule 36 (constants_list)
+    $default  reduce using rule 34 (constants_list)
 
     constants_list  go to state 56
 
 
 State 47
 
-   33 list_constants: kCONSTANTS constants_list .
+   31 list_constants: kCONSTANTS constants_list .
 
-    $default  reduce using rule 33 (list_constants)
+    $default  reduce using rule 31 (list_constants)
 
 
 State 48
 
-   50 terminal_string: tSTRING .
+   52 terminal_string: tSTRING .
 
-    $default  reduce using rule 50 (terminal_string)
+    $default  reduce using rule 52 (terminal_string)
 
 
 State 49
 
-   37 action_def: tLPAREN kACTION terminal_string . parameters_action action_def_body tRPAREN
+   35 action_def: tLPAREN kACTION terminal_string . parameters_action action_def_body tRPAREN
 
     kPARAMETERS  shift, and go to state 57
 
@@ -647,9 +662,9 @@ State 50
 
 State 51
 
-   32 constants_def: tLPAREN list_constants tRPAREN .
+   30 constants_def: tLPAREN list_constants tRPAREN .
 
-    $default  reduce using rule 32 (constants_def)
+    $default  reduce using rule 30 (constants_def)
 
 
 State 52
@@ -666,7 +681,7 @@ State 53
     tHYPHEN    shift, and go to state 60
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 26 (typed_list)
+    $default  reduce using rule 24 (typed_list)
 
     typed_list  go to state 62
     variable    go to state 63
@@ -681,33 +696,33 @@ State 54
 
 State 55
 
-   35 constants_list: tHYPHEN terminal_string . constants_list
+   33 constants_list: tHYPHEN terminal_string . constants_list
 
     tHYPHEN  shift, and go to state 45
     tSTRING  shift, and go to state 46
 
-    $default  reduce using rule 36 (constants_list)
+    $default  reduce using rule 34 (constants_list)
 
     constants_list  go to state 64
 
 
 State 56
 
-   34 constants_list: tSTRING constants_list .
+   32 constants_list: tSTRING constants_list .
 
-    $default  reduce using rule 34 (constants_list)
+    $default  reduce using rule 32 (constants_list)
 
 
 State 57
 
-   38 parameters_action: kPARAMETERS . tLPAREN parameter_typed_list tRPAREN
+   36 parameters_action: kPARAMETERS . tLPAREN parameter_typed_list tRPAREN
 
     tLPAREN  shift, and go to state 65
 
 
 State 58
 
-   37 action_def: tLPAREN kACTION terminal_string parameters_action . action_def_body tRPAREN
+   35 action_def: tLPAREN kACTION terminal_string parameters_action . action_def_body tRPAREN
 
     kPRECONDITION  shift, and go to state 66
 
@@ -726,7 +741,7 @@ State 59
 
 State 60
 
-   25 typed_list: tHYPHEN . terminal_type_string typed_list
+   23 typed_list: tHYPHEN . terminal_type_string typed_list
 
     tSTRING  shift, and go to state 70
 
@@ -735,9 +750,9 @@ State 60
 
 State 61
 
-   29 variable: tVARIABLE .
+   27 variable: tVARIABLE .
 
-    $default  reduce using rule 29 (variable)
+    $default  reduce using rule 27 (variable)
 
 
 State 62
@@ -749,12 +764,12 @@ State 62
 
 State 63
 
-   24 typed_list: variable . typed_list
+   22 typed_list: variable . typed_list
 
     tHYPHEN    shift, and go to state 60
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 26 (typed_list)
+    $default  reduce using rule 24 (typed_list)
 
     typed_list  go to state 73
     variable    go to state 63
@@ -762,18 +777,18 @@ State 63
 
 State 64
 
-   35 constants_list: tHYPHEN terminal_string constants_list .
+   33 constants_list: tHYPHEN terminal_string constants_list .
 
-    $default  reduce using rule 35 (constants_list)
+    $default  reduce using rule 33 (constants_list)
 
 
 State 65
 
-   38 parameters_action: kPARAMETERS tLPAREN . parameter_typed_list tRPAREN
+   36 parameters_action: kPARAMETERS tLPAREN . parameter_typed_list tRPAREN
 
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 31 (parameter_typed_list)
+    $default  reduce using rule 29 (parameter_typed_list)
 
     variable              go to state 74
     parameter_typed_list  go to state 75
@@ -781,28 +796,28 @@ State 65
 
 State 66
 
-   40 action_preconditions: kPRECONDITION . tLPAREN action_preconditions_predicates tRPAREN
-   41                     | kPRECONDITION . action_preconditions_predicates
+   38 action_preconditions: kPRECONDITION . tLPAREN list_fluents tRPAREN
+   39                     | kPRECONDITION . list_fluents
 
     tLPAREN  shift, and go to state 76
     kAND     shift, and go to state 77
 
-    $default  reduce using rule 46 (action_preconditions_predicates)
+    $default  reduce using rule 49 (list_fluents)
 
-    action_formula_skeleton          go to state 78
-    action_preconditions_predicates  go to state 79
+    list_fluents             go to state 78
+    action_formula_skeleton  go to state 79
 
 
 State 67
 
-   37 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body . tRPAREN
+   35 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body . tRPAREN
 
     tRPAREN  shift, and go to state 80
 
 
 State 68
 
-   39 action_def_body: action_preconditions . action_result
+   37 action_def_body: action_preconditions . action_result
 
     kEFFECT   shift, and go to state 81
     kOBSERVE  shift, and go to state 82
@@ -817,7 +832,7 @@ State 69
     tHYPHEN    shift, and go to state 60
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 26 (typed_list)
+    $default  reduce using rule 24 (typed_list)
 
     typed_list  go to state 84
     variable    go to state 63
@@ -825,19 +840,19 @@ State 69
 
 State 70
 
-   51 terminal_type_string: tSTRING .
+   53 terminal_type_string: tSTRING .
 
-    $default  reduce using rule 51 (terminal_type_string)
+    $default  reduce using rule 53 (terminal_type_string)
 
 
 State 71
 
-   25 typed_list: tHYPHEN terminal_type_string . typed_list
+   23 typed_list: tHYPHEN terminal_type_string . typed_list
 
     tHYPHEN    shift, and go to state 60
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 26 (typed_list)
+    $default  reduce using rule 24 (typed_list)
 
     typed_list  go to state 85
     variable    go to state 63
@@ -852,46 +867,46 @@ State 72
 
 State 73
 
-   24 typed_list: variable typed_list .
+   22 typed_list: variable typed_list .
 
-    $default  reduce using rule 24 (typed_list)
+    $default  reduce using rule 22 (typed_list)
 
 
 State 74
 
-   30 parameter_typed_list: variable . tHYPHEN terminal_type_string parameter_typed_list
+   28 parameter_typed_list: variable . tHYPHEN terminal_type_string parameter_typed_list
 
     tHYPHEN  shift, and go to state 86
 
 
 State 75
 
-   38 parameters_action: kPARAMETERS tLPAREN parameter_typed_list . tRPAREN
+   36 parameters_action: kPARAMETERS tLPAREN parameter_typed_list . tRPAREN
 
     tRPAREN  shift, and go to state 87
 
 
 State 76
 
-   22 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
-   23                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
-   40 action_preconditions: kPRECONDITION tLPAREN . action_preconditions_predicates tRPAREN
+   38 action_preconditions: kPRECONDITION tLPAREN . list_fluents tRPAREN
+   50 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
+   51                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
 
     tLPAREN  shift, and go to state 88
     kAND     shift, and go to state 77
     kNOT     shift, and go to state 89
     tSTRING  shift, and go to state 48
 
-    $default  reduce using rule 46 (action_preconditions_predicates)
+    $default  reduce using rule 49 (list_fluents)
 
-    action_formula_skeleton          go to state 78
-    action_preconditions_predicates  go to state 90
-    terminal_string                  go to state 91
+    list_fluents             go to state 90
+    action_formula_skeleton  go to state 79
+    terminal_string          go to state 91
 
 
 State 77
 
-   44 action_preconditions_predicates: kAND . action_formula_skeleton action_preconditions_predicates
+   47 list_fluents: kAND . action_formula_skeleton list_fluents
 
     tLPAREN  shift, and go to state 88
 
@@ -900,92 +915,95 @@ State 77
 
 State 78
 
-   45 action_preconditions_predicates: action_formula_skeleton . action_preconditions_predicates
+   39 action_preconditions: kPRECONDITION list_fluents .
 
-    tLPAREN  shift, and go to state 88
-    kAND     shift, and go to state 77
-
-    $default  reduce using rule 46 (action_preconditions_predicates)
-
-    action_formula_skeleton          go to state 78
-    action_preconditions_predicates  go to state 93
+    $default  reduce using rule 39 (action_preconditions)
 
 
 State 79
 
-   41 action_preconditions: kPRECONDITION action_preconditions_predicates .
+   48 list_fluents: action_formula_skeleton . list_fluents
 
-    $default  reduce using rule 41 (action_preconditions)
+    tLPAREN  shift, and go to state 88
+    kAND     shift, and go to state 77
+
+    tLPAREN   [reduce using rule 49 (list_fluents)]
+    kAND      [reduce using rule 49 (list_fluents)]
+    $default  reduce using rule 49 (list_fluents)
+
+    list_fluents             go to state 93
+    action_formula_skeleton  go to state 79
 
 
 State 80
 
-   37 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN .
+   35 action_def: tLPAREN kACTION terminal_string parameters_action action_def_body tRPAREN .
 
-    $default  reduce using rule 37 (action_def)
+    $default  reduce using rule 35 (action_def)
 
 
 State 81
 
-   42 action_result: kEFFECT . tLPAREN action_predicates tRPAREN
+   40 action_result: kEFFECT . tLPAREN list_fluents tRPAREN
+   41              | kEFFECT . tLPAREN conditional_effect tRPAREN
 
     tLPAREN  shift, and go to state 94
 
 
 State 82
 
-   43 action_result: kOBSERVE . action_predicates
+   42 action_result: kOBSERVE . list_fluents
 
     tLPAREN  shift, and go to state 88
-    kAND     shift, and go to state 95
+    kAND     shift, and go to state 77
 
-    $default  reduce using rule 49 (action_predicates)
+    $default  reduce using rule 49 (list_fluents)
 
-    action_formula_skeleton  go to state 96
-    action_predicates        go to state 97
+    list_fluents             go to state 95
+    action_formula_skeleton  go to state 79
 
 
 State 83
 
-   39 action_def_body: action_preconditions action_result .
+   37 action_def_body: action_preconditions action_result .
 
-    $default  reduce using rule 39 (action_def_body)
+    $default  reduce using rule 37 (action_def_body)
 
 
 State 84
 
    21 atomic_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string typed_list . tRPAREN tRPAREN
 
-    tRPAREN  shift, and go to state 98
+    tRPAREN  shift, and go to state 96
 
 
 State 85
 
-   25 typed_list: tHYPHEN terminal_type_string typed_list .
+   23 typed_list: tHYPHEN terminal_type_string typed_list .
 
-    $default  reduce using rule 25 (typed_list)
+    $default  reduce using rule 23 (typed_list)
 
 
 State 86
 
-   30 parameter_typed_list: variable tHYPHEN . terminal_type_string parameter_typed_list
+   28 parameter_typed_list: variable tHYPHEN . terminal_type_string parameter_typed_list
 
     tSTRING  shift, and go to state 70
 
-    terminal_type_string  go to state 99
+    terminal_type_string  go to state 97
 
 
 State 87
 
-   38 parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN .
+   36 parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN .
 
-    $default  reduce using rule 38 (parameters_action)
+    $default  reduce using rule 36 (parameters_action)
 
 
 State 88
 
-   22 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
-   23                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
+   50 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
+   51                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
 
     kNOT     shift, and go to state 89
     tSTRING  shift, and go to state 48
@@ -995,250 +1013,357 @@ State 88
 
 State 89
 
-   23 action_formula_skeleton: tLPAREN kNOT . tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
+   51 action_formula_skeleton: tLPAREN kNOT . tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
 
-    tLPAREN  shift, and go to state 100
+    tLPAREN  shift, and go to state 98
 
 
 State 90
 
-   40 action_preconditions: kPRECONDITION tLPAREN action_preconditions_predicates . tRPAREN
+   38 action_preconditions: kPRECONDITION tLPAREN list_fluents . tRPAREN
 
-    tRPAREN  shift, and go to state 101
+    tRPAREN  shift, and go to state 99
 
 
 State 91
 
-   22 action_formula_skeleton: tLPAREN terminal_string . actions_typed_list tRPAREN
+   50 action_formula_skeleton: tLPAREN terminal_string . actions_typed_list tRPAREN
 
     tVARIABLE  shift, and go to state 61
 
-    $default  reduce using rule 28 (actions_typed_list)
+    $default  reduce using rule 26 (actions_typed_list)
 
-    actions_typed_list  go to state 102
-    variable            go to state 103
+    actions_typed_list  go to state 100
+    variable            go to state 101
 
 
 State 92
 
-   44 action_preconditions_predicates: kAND action_formula_skeleton . action_preconditions_predicates
+   47 list_fluents: kAND action_formula_skeleton . list_fluents
 
     tLPAREN  shift, and go to state 88
     kAND     shift, and go to state 77
 
-    $default  reduce using rule 46 (action_preconditions_predicates)
+    tLPAREN   [reduce using rule 49 (list_fluents)]
+    kAND      [reduce using rule 49 (list_fluents)]
+    $default  reduce using rule 49 (list_fluents)
 
-    action_formula_skeleton          go to state 78
-    action_preconditions_predicates  go to state 104
+    list_fluents             go to state 102
+    action_formula_skeleton  go to state 79
 
 
 State 93
 
-   45 action_preconditions_predicates: action_formula_skeleton action_preconditions_predicates .
+   48 list_fluents: action_formula_skeleton list_fluents .
 
-    $default  reduce using rule 45 (action_preconditions_predicates)
+    $default  reduce using rule 48 (list_fluents)
 
 
 State 94
 
-   42 action_result: kEFFECT tLPAREN . action_predicates tRPAREN
+   40 action_result: kEFFECT tLPAREN . list_fluents tRPAREN
+   41              | kEFFECT tLPAREN . conditional_effect tRPAREN
 
-    tLPAREN  shift, and go to state 88
-    kAND     shift, and go to state 95
+    tLPAREN  shift, and go to state 103
+    kAND     shift, and go to state 104
 
-    $default  reduce using rule 49 (action_predicates)
+    $default  reduce using rule 49 (list_fluents)
 
-    action_formula_skeleton  go to state 96
-    action_predicates        go to state 105
+    conditional_effect       go to state 105
+    list_fluents             go to state 106
+    action_formula_skeleton  go to state 79
 
 
 State 95
 
-   47 action_predicates: kAND . action_formula_skeleton action_predicates
+   42 action_result: kOBSERVE list_fluents .
 
-    tLPAREN  shift, and go to state 88
-
-    action_formula_skeleton  go to state 106
+    $default  reduce using rule 42 (action_result)
 
 
 State 96
 
-   48 action_predicates: action_formula_skeleton . action_predicates
+   21 atomic_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN . tRPAREN
 
-    tLPAREN  shift, and go to state 88
-    kAND     shift, and go to state 95
-
-    $default  reduce using rule 49 (action_predicates)
-
-    action_formula_skeleton  go to state 96
-    action_predicates        go to state 107
+    tRPAREN  shift, and go to state 107
 
 
 State 97
 
-   43 action_result: kOBSERVE action_predicates .
+   28 parameter_typed_list: variable tHYPHEN terminal_type_string . parameter_typed_list
 
-    $default  reduce using rule 43 (action_result)
+    tVARIABLE  shift, and go to state 61
+
+    $default  reduce using rule 29 (parameter_typed_list)
+
+    variable              go to state 74
+    parameter_typed_list  go to state 108
 
 
 State 98
 
-   21 atomic_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN . tRPAREN
+   51 action_formula_skeleton: tLPAREN kNOT tLPAREN . terminal_string actions_typed_list tRPAREN tRPAREN
 
-    tRPAREN  shift, and go to state 108
+    tSTRING  shift, and go to state 48
+
+    terminal_string  go to state 109
 
 
 State 99
 
-   30 parameter_typed_list: variable tHYPHEN terminal_type_string . parameter_typed_list
+   38 action_preconditions: kPRECONDITION tLPAREN list_fluents tRPAREN .
 
-    tVARIABLE  shift, and go to state 61
-
-    $default  reduce using rule 31 (parameter_typed_list)
-
-    variable              go to state 74
-    parameter_typed_list  go to state 109
+    $default  reduce using rule 38 (action_preconditions)
 
 
 State 100
 
-   23 action_formula_skeleton: tLPAREN kNOT tLPAREN . terminal_string actions_typed_list tRPAREN tRPAREN
+   50 action_formula_skeleton: tLPAREN terminal_string actions_typed_list . tRPAREN
 
-    tSTRING  shift, and go to state 48
-
-    terminal_string  go to state 110
+    tRPAREN  shift, and go to state 110
 
 
 State 101
 
-   40 action_preconditions: kPRECONDITION tLPAREN action_preconditions_predicates tRPAREN .
+   25 actions_typed_list: variable . actions_typed_list
 
-    $default  reduce using rule 40 (action_preconditions)
+    tVARIABLE  shift, and go to state 61
+
+    $default  reduce using rule 26 (actions_typed_list)
+
+    actions_typed_list  go to state 111
+    variable            go to state 101
 
 
 State 102
 
-   22 action_formula_skeleton: tLPAREN terminal_string actions_typed_list . tRPAREN
+   47 list_fluents: kAND action_formula_skeleton list_fluents .
 
-    tRPAREN  shift, and go to state 111
+    $default  reduce using rule 47 (list_fluents)
 
 
 State 103
 
-   27 actions_typed_list: variable . actions_typed_list
+   44 conditional_effect: tLPAREN . kWHEN condition effect tRPAREN
+   50 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
+   51                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
 
-    tVARIABLE  shift, and go to state 61
+    kNOT     shift, and go to state 89
+    kWHEN    shift, and go to state 112
+    tSTRING  shift, and go to state 48
 
-    $default  reduce using rule 28 (actions_typed_list)
-
-    actions_typed_list  go to state 112
-    variable            go to state 103
+    terminal_string  go to state 91
 
 
 State 104
 
-   44 action_preconditions_predicates: kAND action_formula_skeleton action_preconditions_predicates .
+   43 conditional_effect: kAND . tLPAREN kWHEN condition effect tRPAREN
+   47 list_fluents: kAND . action_formula_skeleton list_fluents
 
-    $default  reduce using rule 44 (action_preconditions_predicates)
+    tLPAREN  shift, and go to state 113
+
+    action_formula_skeleton  go to state 92
 
 
 State 105
 
-   42 action_result: kEFFECT tLPAREN action_predicates . tRPAREN
+   41 action_result: kEFFECT tLPAREN conditional_effect . tRPAREN
 
-    tRPAREN  shift, and go to state 113
+    tRPAREN  shift, and go to state 114
 
 
 State 106
 
-   47 action_predicates: kAND action_formula_skeleton . action_predicates
+   40 action_result: kEFFECT tLPAREN list_fluents . tRPAREN
 
-    tLPAREN  shift, and go to state 88
-    kAND     shift, and go to state 95
-
-    $default  reduce using rule 49 (action_predicates)
-
-    action_formula_skeleton  go to state 96
-    action_predicates        go to state 114
+    tRPAREN  shift, and go to state 115
 
 
 State 107
-
-   48 action_predicates: action_formula_skeleton action_predicates .
-
-    $default  reduce using rule 48 (action_predicates)
-
-
-State 108
 
    21 atomic_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN .
 
     $default  reduce using rule 21 (atomic_formula_skeleton)
 
 
+State 108
+
+   28 parameter_typed_list: variable tHYPHEN terminal_type_string parameter_typed_list .
+
+    $default  reduce using rule 28 (parameter_typed_list)
+
+
 State 109
 
-   30 parameter_typed_list: variable tHYPHEN terminal_type_string parameter_typed_list .
+   51 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string . actions_typed_list tRPAREN tRPAREN
 
-    $default  reduce using rule 30 (parameter_typed_list)
+    tVARIABLE  shift, and go to state 61
+
+    $default  reduce using rule 26 (actions_typed_list)
+
+    actions_typed_list  go to state 116
+    variable            go to state 101
 
 
 State 110
 
-   23 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string . actions_typed_list tRPAREN tRPAREN
+   50 action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN .
 
-    tVARIABLE  shift, and go to state 61
-
-    $default  reduce using rule 28 (actions_typed_list)
-
-    actions_typed_list  go to state 115
-    variable            go to state 103
+    $default  reduce using rule 50 (action_formula_skeleton)
 
 
 State 111
 
-   22 action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN .
+   25 actions_typed_list: variable actions_typed_list .
 
-    $default  reduce using rule 22 (action_formula_skeleton)
+    $default  reduce using rule 25 (actions_typed_list)
 
 
 State 112
 
-   27 actions_typed_list: variable actions_typed_list .
+   44 conditional_effect: tLPAREN kWHEN . condition effect tRPAREN
 
-    $default  reduce using rule 27 (actions_typed_list)
+    tLPAREN  shift, and go to state 88
+    kAND     shift, and go to state 77
+
+    tLPAREN   [reduce using rule 49 (list_fluents)]
+    kAND      [reduce using rule 49 (list_fluents)]
+    $default  reduce using rule 49 (list_fluents)
+
+    condition                go to state 117
+    list_fluents             go to state 118
+    action_formula_skeleton  go to state 79
 
 
 State 113
 
-   42 action_result: kEFFECT tLPAREN action_predicates tRPAREN .
+   43 conditional_effect: kAND tLPAREN . kWHEN condition effect tRPAREN
+   50 action_formula_skeleton: tLPAREN . terminal_string actions_typed_list tRPAREN
+   51                        | tLPAREN . kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN
 
-    $default  reduce using rule 42 (action_result)
+    kNOT     shift, and go to state 89
+    kWHEN    shift, and go to state 119
+    tSTRING  shift, and go to state 48
+
+    terminal_string  go to state 91
 
 
 State 114
 
-   47 action_predicates: kAND action_formula_skeleton action_predicates .
+   41 action_result: kEFFECT tLPAREN conditional_effect tRPAREN .
 
-    $default  reduce using rule 47 (action_predicates)
+    $default  reduce using rule 41 (action_result)
 
 
 State 115
 
-   23 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list . tRPAREN tRPAREN
+   40 action_result: kEFFECT tLPAREN list_fluents tRPAREN .
 
-    tRPAREN  shift, and go to state 116
+    $default  reduce using rule 40 (action_result)
 
 
 State 116
 
-   23 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN . tRPAREN
+   51 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list . tRPAREN tRPAREN
 
-    tRPAREN  shift, and go to state 117
+    tRPAREN  shift, and go to state 120
 
 
 State 117
 
-   23 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN .
+   44 conditional_effect: tLPAREN kWHEN condition . effect tRPAREN
 
-    $default  reduce using rule 23 (action_formula_skeleton)
+    tLPAREN  shift, and go to state 88
+    kAND     shift, and go to state 77
+
+    $default  reduce using rule 49 (list_fluents)
+
+    effect                   go to state 121
+    list_fluents             go to state 122
+    action_formula_skeleton  go to state 79
+
+
+State 118
+
+   45 condition: list_fluents .
+
+    $default  reduce using rule 45 (condition)
+
+
+State 119
+
+   43 conditional_effect: kAND tLPAREN kWHEN . condition effect tRPAREN
+
+    tLPAREN  shift, and go to state 88
+    kAND     shift, and go to state 77
+
+    tLPAREN   [reduce using rule 49 (list_fluents)]
+    kAND      [reduce using rule 49 (list_fluents)]
+    $default  reduce using rule 49 (list_fluents)
+
+    condition                go to state 123
+    list_fluents             go to state 118
+    action_formula_skeleton  go to state 79
+
+
+State 120
+
+   51 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN . tRPAREN
+
+    tRPAREN  shift, and go to state 124
+
+
+State 121
+
+   44 conditional_effect: tLPAREN kWHEN condition effect . tRPAREN
+
+    tRPAREN  shift, and go to state 125
+
+
+State 122
+
+   46 effect: list_fluents .
+
+    $default  reduce using rule 46 (effect)
+
+
+State 123
+
+   43 conditional_effect: kAND tLPAREN kWHEN condition . effect tRPAREN
+
+    tLPAREN  shift, and go to state 88
+    kAND     shift, and go to state 77
+
+    $default  reduce using rule 49 (list_fluents)
+
+    effect                   go to state 126
+    list_fluents             go to state 122
+    action_formula_skeleton  go to state 79
+
+
+State 124
+
+   51 action_formula_skeleton: tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN .
+
+    $default  reduce using rule 51 (action_formula_skeleton)
+
+
+State 125
+
+   44 conditional_effect: tLPAREN kWHEN condition effect tRPAREN .
+
+    $default  reduce using rule 44 (conditional_effect)
+
+
+State 126
+
+   43 conditional_effect: kAND tLPAREN kWHEN condition effect . tRPAREN
+
+    tRPAREN  shift, and go to state 127
+
+
+State 127
+
+   43 conditional_effect: kAND tLPAREN kWHEN condition effect tRPAREN .
+
+    $default  reduce using rule 43 (conditional_effect)

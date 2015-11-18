@@ -21,7 +21,7 @@
 %}
 
 %code requires {
-  #include "./Classes/Preconditions.h"
+  #include "./Classes/Effect.h"
 }
 
 %union {
@@ -30,18 +30,18 @@
   char *sval;
   Predicate *predicate;
   Variable *var;
-  Preconditions *prec;
+  ListPredicates *prec;
 }
 
 %token tLPAREN tRPAREN tHYPHEN
 %token kREQUIREMENTS kTYPING kSTRIPS kTYPES kPREDICATES kCONSTANTS
-%token kACTION kPARAMETERS kPRECONDITION kEFFECT kAND kNOT kOBSERVE
+%token kACTION kPARAMETERS kPRECONDITION kEFFECT kAND kNOT kOBSERVE kWHEN
 %token <sval> kDEFINE kDOMAIN kPROBLEM tSTRING tVARIABLE
 
 %type <sval> domain_name terminal_type_string terminal_string
 %type <predicate> actions_typed_list action_formula_skeleton
 %type <var> variable
-%type <prec> action_preconditions_predicates
+%type <prec> list_fluents condition effect
 
 %start start
 
@@ -92,16 +92,6 @@ atomic_formula_skeleton: tLPAREN terminal_string typed_list tRPAREN
   | tLPAREN kNOT tLPAREN terminal_string typed_list tRPAREN tRPAREN
   ;
 
-action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN {
-  string st = $2;
-  $3->set_name($2);
-  $$ = $3;
-}
-  | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN {
-  $5->set_name($4);
-  $5->negate();
-  $$ = $5;
-};
 
 /*Variables ?i*/
 typed_list: variable typed_list
@@ -150,36 +140,59 @@ parameters_action: kPARAMETERS tLPAREN parameter_typed_list tRPAREN
 action_def_body: action_preconditions action_result
 
 /*Action preconditions*/
-action_preconditions: kPRECONDITION tLPAREN action_preconditions_predicates tRPAREN {
-  cout << $3->print_preconditions() << endl;
+action_preconditions: kPRECONDITION tLPAREN list_fluents tRPAREN {
+  cout << $3->print_predicates() << endl;
 }
-  | kPRECONDITION action_preconditions_predicates{
-    cout << $2->print_preconditions() << endl;
+  | kPRECONDITION list_fluents{
+    cout << $2->print_predicates() << endl;
   }
 
 
 /*Action Effects*/
-action_result: kEFFECT tLPAREN action_predicates tRPAREN
-  | kOBSERVE action_predicates
+action_result: kEFFECT tLPAREN list_fluents tRPAREN
+  | kEFFECT tLPAREN conditional_effect tRPAREN
+  | kOBSERVE list_fluents
 
-action_preconditions_predicates: kAND action_formula_skeleton action_preconditions_predicates{
+  /*Conditional effects*/
+conditional_effect: kAND tLPAREN kWHEN condition effect tRPAREN {
+  Effect* e = new Effect();
+  e->add_condition($4);
+  e->add_effect($5);
+}
+  | tLPAREN kWHEN condition effect tRPAREN {
+    Effect* e = new Effect();
+    e->add_condition($3);
+    e->add_effect($4);
+  }
+
+condition: list_fluents {$$ = $1;}
+
+effect: list_fluents {$$ = $1;}
+
+list_fluents: kAND action_formula_skeleton list_fluents{
   $3->add_predicate($2);
   $$ = $3;
-}
-  | action_formula_skeleton action_preconditions_predicates {
+  }
+  | action_formula_skeleton list_fluents {
     $2->add_predicate($1);
     $$ = $2;
   }
   | {
-    Preconditions* v = new Preconditions();
+    ListPredicates* v = new ListPredicates();
     $$ = v;
   }
   ;
 
-  action_predicates: kAND action_formula_skeleton action_predicates
-    | action_formula_skeleton action_predicates
-    |
-    ;
+action_formula_skeleton: tLPAREN terminal_string actions_typed_list tRPAREN {
+  string st = $2;
+  $3->set_name($2);
+  $$ = $3;
+}
+  | tLPAREN kNOT tLPAREN terminal_string actions_typed_list tRPAREN tRPAREN {
+  $5->set_name($4);
+  $5->negate();
+  $$ = $5;
+};
 
 /*Terminal leafs*/
 terminal_string: tSTRING {
