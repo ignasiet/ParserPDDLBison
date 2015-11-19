@@ -59,5 +59,5 @@ void yyerror(char const *s) {
   //         s,
   //         yytext,
   //         yylineno);
-  cout << s << endl;
+  cout << "In line: " << yylineno << " error: " << s << endl;
 }

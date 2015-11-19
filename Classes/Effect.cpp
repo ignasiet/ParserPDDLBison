@@ -6,7 +6,16 @@
 using namespace std;
 
 Effect::Effect(){
+  conditional = false;
+  observation = false;
+}
 
+void Effect::set_conditional(){
+  conditional = true;
+}
+
+void Effect::set_observation(){
+  observation = true;
 }
 
 bool Effect::is_conditional(){

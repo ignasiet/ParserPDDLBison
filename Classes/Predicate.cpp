@@ -20,7 +20,7 @@ bool Predicate::get_negated(){
   return negated;
 }
 string Predicate::name(){
-  list<Variable*>::iterator iter;
+  vector<Variable*>::iterator iter;
   string return_string;
   if(Predicate::get_negated()){
     return_string = "Not " + predicate_name;

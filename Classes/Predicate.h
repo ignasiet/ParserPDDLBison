@@ -1,13 +1,13 @@
 #include <iostream>
 #include <string>
-#include <list>
+#include <vector>
 #include "Variable.h"
 using namespace std;
 
 class Predicate {
     string predicate_name;
     bool negated;
-    list<Variable *> list_parameters;
+    vector<Variable *> list_parameters;
   public:
     Predicate ();
     void set_name(string);
